@@ -5,8 +5,10 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && docker-php-ext-install pgsql pdo pdo_pgsql
 
-# 🔥 SOLO desactivar event (NO activar prefork otra vez)
-RUN a2dismod mpm_event || true
+# 🔥 LIMPIAR TODOS LOS MPM Y DEJAR SOLO UNO
+RUN a2dismod mpm_event || true \
+ && a2dismod mpm_worker || true \
+ && a2enmod mpm_prefork
 
 # Copiar proyecto
 COPY . /var/www/html/
