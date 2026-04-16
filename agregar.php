@@ -28,10 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
 
     $tmp = $_FILES['foto']['tmp_name'];
     $filename = "user_" . time() . ".png";
-    $ruta = "API/avatars/" . $filename;
-
+    $ruta = "avatars/" . $filename;
     move_uploaded_file($tmp, $ruta);
-
     $avatar = $ruta;
 
 } else {
