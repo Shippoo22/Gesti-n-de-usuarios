@@ -28,9 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
 
     $tmp = $_FILES['foto']['tmp_name'];
     $filename = "user_" . time() . ".png";
-    $ruta = "avatars/" . $filename;
-    move_uploaded_file($tmp, $ruta);
-    $avatar = $ruta;
+    $rutaFisica = __DIR__ . "/avatars/" . $filename;
+    $rutaBD = "avatars/" . $filename;
+
+    move_uploaded_file($tmp, $rutaFisica);
+
+    $avatar = $rutaBD;
 
 } else {
 
