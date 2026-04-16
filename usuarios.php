@@ -74,7 +74,9 @@ if (!$resultado) {
 } else {
     while ($fila = pg_fetch_assoc($resultado)) {
 
-        $foto = !empty($fila['avatar']) ? "API/" . $fila['avatar'] : "img/default-user.png";
+        $foto = !empty($fila['avatar']) 
+        ? $fila['avatar'] 
+        : "api/avatar.php?name=" . urlencode($fila['nombre']);
 
         echo "
         <tr>
