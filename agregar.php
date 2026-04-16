@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
 
         if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
             $rutaFisica = __DIR__ . "/avatars/" . $filename;
+        $rutaFisica = __DIR__ . "/avatars/" . $filename;
         $rutaBD = "avatars/" . $filename;
 
         move_uploaded_file($tmp, $rutaFisica);
