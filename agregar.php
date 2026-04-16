@@ -25,15 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
     } else {
 
         if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
+            $rutaFisica = __DIR__ . "/avatars/" . $filename;
+        $rutaBD = "avatars/" . $filename;
 
-    $tmp = $_FILES['foto']['tmp_name'];
-    $filename = "user_" . time() . ".png";
-    $rutaFisica = __DIR__ . "/avatars/" . $filename;
-    $rutaBD = "avatars/" . $filename;
+        move_uploaded_file($tmp, $rutaFisica);
 
-    move_uploaded_file($tmp, $rutaFisica);
-
-    $avatar = $rutaBD;
+        $avatar = $rutaBD;
 
 } else {
 
