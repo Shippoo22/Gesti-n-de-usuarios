@@ -95,8 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
       <?php endif; ?>
 
       <div class="user-image mb-3">
-        <img id="avatarPreview" src="http://localhost/CRUD/api/avatar.php?name=User" class="avatar-glow">
-      </div>
+      <img id="avatarPreview" src="api/avatar.php?name=User" class="avatar-glow">
+    </div>
 
       <form action="" method="POST" enctype="multipart/form-data" class="text-start">
        <div class="mb-3">
@@ -130,21 +130,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-const fileInput = document.querySelector('input[name="foto"]');
-const avatarImg = document.getElementById('avatarPreview');
+<script>
+const input = document.querySelector('input[name="nombre"]');
+const avatar = document.getElementById('avatarPreview');
 
-fileInput.addEventListener('change', function () {
-    const file = this.files[0];
+input.addEventListener('input', () => {
+    let nombre = input.value.trim();
 
-    if (file) {
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-            avatarImg.src = e.target.result;
-        }
-
-        reader.readAsDataURL(file);
+    if (nombre.length > 0) {
+        avatar.src = "api/avatar.php?name=" + encodeURIComponent(nombre) + "&t=" + new Date().getTime();
+    } else {
+        avatar.src = "api/avatar.php?name=User";
     }
 });
 </script>
