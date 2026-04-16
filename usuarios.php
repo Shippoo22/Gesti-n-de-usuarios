@@ -77,7 +77,6 @@ if (!$resultado) {
     $foto = !empty($fila['avatar']) 
     ? $fila['avatar'] 
     : "api/avatar.php?name=" . urlencode($fila['nombre']);
-
         echo "
         <tr>
             <td>{$fila['id']}</td>
