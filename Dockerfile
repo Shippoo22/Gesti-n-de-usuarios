@@ -8,12 +8,13 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd pgsql pdo pdo_pgsql
 
-# 🔥 FORZAR SOLO UN MPM (QUITAR TODOS Y DEJAR PREFORK)
-RUN a2dismod mpm_event || true
-RUN a2dismod mpm_worker || true
-RUN a2enmod mpm_prefork
+# 💣 ELIMINAR TODOS LOS MPM (esto es la clave)
 RUN rm -f /etc/apache2/mods-enabled/mpm_*.load
+
+# ✅ ACTIVAR SOLO UNO
 RUN a2enmod mpm_prefork
+
+# opcional
 RUN a2enmod rewrite
 
 COPY . /var/www/html/
