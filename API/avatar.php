@@ -38,9 +38,18 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
     // círculo
     imagefilledellipse($image, $size/2, $size/2, $size, $size, $color);
 
-    // 🔤 obtener 2 iniciales
+    // 🔤 obtener 2 iniciales BIEN
     $words = explode(" ", trim($name));
-    $initial = substr($initial, 0, 2);
+    $initial = "";
+
+foreach ($words as $w) {
+    if ($w !== "") {
+        $initial .= strtoupper($w[0]);
+    }
+}
+
+// solo 2 letras
+$initial = substr($initial, 0, 2);
 
     foreach ($words as $w) {
         if ($w !== "") {
@@ -63,15 +72,14 @@ $initial = substr($initial, 0, 2);
     $bbox = imagettfbbox($fontSize, 0, $font, $initial);
 
     $x = ($size - ($bbox[2] - $bbox[0])) / 2;
-    $y = ($size - ($bbox[7] - $bbox[1])) / 2;
-
-    $y -= $bbox[7];
+    $y = ($size - ($bbox[5] - $bbox[1])) / 2;
+    $y += $fontSize / 2;
 
         imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
 
     } else {
         // fallback
-        imagestring($image, 5, 70, 80, $initial, $textColor);
+       imagestring($image, 5, 80, 90, $initial, $textColor);
     }
 
     // salida
@@ -98,7 +106,7 @@ function guardarAvatar() {
     $name = $_POST['name'] ?? 'User';
 
     $filename = "user_" . time() . ".png";
-    $ruta = "avatars/" . $filename;
+    $ruta = __DIR__ . "/avatars/" . $filename;
 
     crearAvatar($name, true, $ruta);
 
