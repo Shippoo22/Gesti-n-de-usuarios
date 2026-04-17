@@ -24,14 +24,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
         $error = "⚠️ Todos los campos son obligatorios.";
     } else {
 
-        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
-            $rutaFisica = __DIR__ . "/avatars/" . $filename;
-        $rutaFisica = __DIR__ . "/avatars/" . $filename;
-        $rutaBD = "avatars/" . $filename;
+       if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
 
-        move_uploaded_file($tmp, $rutaFisica);
+    $tmp = $_FILES['foto']['tmp_name'];
+    $filename = "user_" . time() . ".png";
 
+    // ruta REAL en servidor
+    $rutaFisica = __DIR__ . "/API/avatars/" . $filename;
+
+    // ruta que se guarda en BD
+    $rutaBD = "API/avatars/" . $filename;
+
+    if (move_uploaded_file($tmp, $rutaFisica)) {
         $avatar = $rutaBD;
+    } else {
+        $error = "❌ No se pudo subir la imagen";
+    }
 
 } else {
 
