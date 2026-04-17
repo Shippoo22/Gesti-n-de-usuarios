@@ -38,9 +38,17 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
     // círculo
     imagefilledellipse($image, $size/2, $size/2, $size, $size, $color);
 
-    // 🔤 obtener 2 iniciales BIEN
-    $words = explode(" ", trim($name));
-    $initial = "";
+// 🔤 obtener iniciales correctamente
+$words = explode(" ", trim($name));
+$words = array_filter($words); // limpia espacios
+
+if (count($words) >= 2) {
+    // Nombre + Apellido
+    $initial = strtoupper($words[0][0] . $words[1][0]);
+} else {
+    // Solo una palabra → usar 2 primeras letras
+    $initial = strtoupper(substr($words[0], 0, 2));
+}
 
 foreach ($words as $w) {
     if ($w !== "") {
