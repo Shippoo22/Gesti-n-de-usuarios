@@ -75,15 +75,17 @@ $initial = substr($initial, 0, 2);
 
     if (file_exists($font)) {
 
-        $fontSize = 110;
+        $fontSize = 130;
 
     $bbox = imagettfbbox($fontSize, 0, $font, $initial);
 
-    $x = ($size - ($bbox[2] - $bbox[0])) / 2;
-    $y = ($size - ($bbox[5] - $bbox[1])) / 2;
-    $y += $fontSize / 2;
+    $textWidth = $bbox[2] - $bbox[0];
+    $textHeight = $bbox[1] - $bbox[7];
+    
+    $x = ($size - $textWidth) / 2;
+    $y = ($size + $textHeight) / 2;
 
-        imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
+    imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
 
     } else {
         // fallback
