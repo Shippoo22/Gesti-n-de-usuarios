@@ -94,8 +94,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
         <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
       <?php endif; ?>
 
-      <div class="user-image mb-3">
-      <img id="avatarPreview" src="api/avatar.php?name=User" class="avatar-glow">
+    <div class="user-image mb-3">
+      <img id="avatarPreview" src="API/avatar.php?name=User" class="avatar-glow">
     </div>
 
       <form action="" method="POST" enctype="multipart/form-data" class="text-start">
@@ -138,9 +138,9 @@ input.addEventListener('input', () => {
     let nombre = input.value.trim();
 
     if (nombre.length > 0) {
-        avatar.src = "api/avatar.php?name=" + encodeURIComponent(nombre) + "&t=" + new Date().getTime();
+        avatar.src = "API/avatar.php?name=" + encodeURIComponent(nombre) + "&t=" + new Date().getTime();
     } else {
-        avatar.src = "api/avatar.php?name=User";
+        avatar.src = "API/avatar.php?name=User";
     }
 });
 </script>
