@@ -75,7 +75,7 @@ $initial = substr($initial, 0, 2);
 
     if (file_exists($font)) {
 
-        $fontSize = 130;
+        $fontSize = 250;
 
     $bbox = imagettfbbox($fontSize, 0, $font, $initial);
 
