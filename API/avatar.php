@@ -15,7 +15,7 @@ if ($method === 'GET') {
 
 function crearAvatar($name, $guardar = false, $ruta = null) {
 
-    $size = 200;
+    $size = 300;
 
     // limpiar buffer (evita errores de imagen rota)
     if (ob_get_length()) ob_clean();
@@ -75,7 +75,7 @@ $initial = substr($initial, 0, 2);
 
     if (file_exists($font)) {
 
-        $fontSize = 250;
+        $fontSize = 300;
 
     $bbox = imagettfbbox($fontSize, 0, $font, $initial);
 
