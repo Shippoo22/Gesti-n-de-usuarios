@@ -1,20 +1,19 @@
 <?php
-
 $host = getenv("PGHOST");
 $port = getenv("PGPORT");
-$dbname = getenv("PGDATABASE");
+$db   = getenv("PGDATABASE");
 $user = getenv("PGUSER");
-$password = getenv("PGPASSWORD");
+$pass = getenv("PGPASSWORD");
 
 $conexion = pg_connect("
     host=$host 
     port=$port 
-    dbname=$dbname 
+    dbname=$db 
     user=$user 
-    password=$password
+    password=$pass
 ");
 
 if (!$conexion) {
-    die("❌ Error de conexión: " . pg_last_error());
+    die("❌ Error de conexión a PostgreSQL");
 }
 ?>
