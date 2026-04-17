@@ -15,7 +15,7 @@ if ($method === 'GET') {
 
 function crearAvatar($name, $guardar = false, $ruta = null) {
 
-    $size = 300;
+    $size = 250;
 
     // limpiar buffer (evita errores de imagen rota)
     if (ob_get_length()) ob_clean();
