@@ -139,16 +139,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-const input = document.querySelector('input[name="nombre"]');
-const avatar = document.getElementById('avatarPreview');
+const fileInput = document.querySelector('input[name="foto"]');
+const nameInput = document.querySelector('input[name="nombre"]');
+const avatarImg = document.getElementById('avatarPreview');
 
-input.addEventListener('input', () => {
-    let nombre = input.value.trim();
+// 🔥 CUANDO SUBES IMAGEN
+fileInput.addEventListener('change', function () {
+    const file = this.files[0];
 
-    if (nombre.length > 0) {
-        avatar.src = "API/avatar.php?name=" + encodeURIComponent(nombre) + "&t=" + new Date().getTime();
-    } else {
-        avatar.src = "API/avatar.php?name=User";
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            avatarImg.src = e.target.result; // 👈 muestra imagen subida
+        }
+
+        reader.readAsDataURL(file);
+    }
+});
+
+// 🔥 CUANDO ESCRIBES NOMBRE (SOLO SI NO HAY IMAGEN)
+nameInput.addEventListener('input', function () {
+    if (!fileInput.files.length) {
+        let nombre = this.value.trim();
+
+        if (nombre.length > 0) {
+            avatarImg.src = "API/avatar.php?name=" + encodeURIComponent(nombre);
+        } else {
+            avatarImg.src = "API/avatar.php?name=User";
+        }
     }
 });
 </script>
