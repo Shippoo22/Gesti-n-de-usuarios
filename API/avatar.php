@@ -116,7 +116,11 @@ function guardarAvatar() {
     $name = $_POST['name'] ?? 'User';
 
     $filename = "user_" . time() . ".png";
-    $ruta = __DIR__ . "/avatars/" . $filename;
+    $ruta = __DIR__ . "/API/avatars/" . $filename;
+    move_uploaded_file($tmp, $ruta);
+
+    // ruta que guardas en BD (IMPORTANTE)
+    $avatar = "API/avatars/" . $filename;
 
     crearAvatar($name, true, $ruta);
 
