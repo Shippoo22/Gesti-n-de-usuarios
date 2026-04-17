@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y \
 RUN a2dismod mpm_event || true
 RUN a2dismod mpm_worker || true
 RUN a2enmod mpm_prefork
-
+RUN rm -f /etc/apache2/mods-enabled/mpm_*.load
+RUN a2enmod mpm_prefork
 RUN a2enmod rewrite
 
 COPY . /var/www/html/
