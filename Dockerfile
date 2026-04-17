@@ -8,10 +8,11 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd pgsql pdo pdo_pgsql
 
-# 🔥 SOLUCIÓN AL ERROR MPM
-RUN a2dismod mpm_event && a2enmod mpm_prefork
+# 🔥 FORZAR SOLO UN MPM (QUITAR TODOS Y DEJAR PREFORK)
+RUN a2dismod mpm_event || true
+RUN a2dismod mpm_worker || true
+RUN a2enmod mpm_prefork
 
-# (opcional pero recomendado)
 RUN a2enmod rewrite
 
 COPY . /var/www/html/
