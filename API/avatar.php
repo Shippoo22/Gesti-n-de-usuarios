@@ -40,13 +40,15 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
 
     // 🔤 obtener 2 iniciales
     $words = explode(" ", trim($name));
-    $initial = "";
+    $initial = substr($initial, 0, 2);
 
     foreach ($words as $w) {
         if ($w !== "") {
-            $initial .= strtoupper(substr($w, 0, 1));
+        $initial .= strtoupper($w[0]);
         }
     }
+
+$initial = substr($initial, 0, 2);
 
     $initial = substr($initial, 0, 2);
 
@@ -58,14 +60,12 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
 
         $fontSize = 110;
 
-        $bbox = imagettfbbox($fontSize, 0, $font, $initial);
+    $bbox = imagettfbbox($fontSize, 0, $font, $initial);
 
-        $textWidth = abs($bbox[4] - $bbox[0]);
-        $textHeight = abs($bbox[5] - $bbox[1]);
+    $x = ($size - ($bbox[2] - $bbox[0])) / 2;
+    $y = ($size - ($bbox[7] - $bbox[1])) / 2;
 
-        // centrado PERFECTO
-        $x = ($size - $textWidth) / 2;
-        $y = ($size / 2) + ($textHeight / 2);
+    $y -= $bbox[7];
 
         imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
 
