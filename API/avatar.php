@@ -2,19 +2,22 @@
 error_reporting(0);
 
 // Detectar método
-$method = $_SERVER['REQUEST_METHOD'];
+if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
 
-if ($method === 'GET') {
-    generarAvatar();
-} elseif ($method === 'POST') {
-    guardarAvatar();
-} elseif ($method === 'PUT') {
-    actualizarAvatar(); // 🔥 agregado
-} elseif ($method === 'DELETE') {
-    eliminarAvatar(); // 🔥 agregado
-} else {
-    http_response_code(405);
-    echo "Método no permitido";
+    $method = $_SERVER['REQUEST_METHOD'];
+
+    if ($method === 'GET') {
+        generarAvatar();
+    } elseif ($method === 'POST') {
+        guardarAvatar();
+    } elseif ($method === 'PUT') {
+        actualizarAvatar();
+    } elseif ($method === 'DELETE') {
+        eliminarAvatar();
+    } else {
+        http_response_code(405);
+        echo "Método no permitido";
+    }
 }
 
 function crearAvatar($name, $guardar = false, $ruta = null) {
