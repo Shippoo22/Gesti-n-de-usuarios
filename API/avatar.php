@@ -54,7 +54,7 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
 
     if (file_exists($font)) {
 
-        $fontSize = 100; // 🔥 bajado porque 600 rompía todo
+        $fontSize = 200; // 🔥 bajado porque 600 rompía todo
 
         $bbox = imagettfbbox($fontSize, 0, $font, $initial);
 
