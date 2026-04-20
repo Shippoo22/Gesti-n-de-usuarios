@@ -55,22 +55,49 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
     $textColor = imagecolorallocate($image, 255, 255, 255);
     $font = realpath(__DIR__ . '/Roboto-Bold.ttf');
 
+// 🔥 INTENTAR CON FUENTE
 if (file_exists($font)) {
 
-    $fontSize = $size * 0.35;
+    $fontSize = $size * 0.45;
 
     $bbox = imagettfbbox($fontSize, 0, $font, $initial);
 
-    $textWidth = $bbox[2] - $bbox[0];
-    $textHeight = $bbox[1] - $bbox[7];
+    // 🔥 si bbox falla → usar fallback
+    if ($bbox) {
 
-    $x = ($size - $textWidth) / 2;
-    $y = ($size + $textHeight) / 2;
+        $textWidth = $bbox[2] - $bbox[0];
+        $textHeight = $bbox[1] - $bbox[7];
 
-    // 🔥 dibujar texto con fuente
-    imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
+        $x = ($size - $textWidth) / 2;
+        $y = ($size + $textHeight) / 2;
+
+        imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
+
+    } else {
+
+        // 🔥 fallback si falla la fuente
+        $fontSize = 5;
+        $textWidth = imagefontwidth($fontSize) * strlen($initial);
+        $textHeight = imagefontheight($fontSize);
+
+        $x = ($size - $textWidth) / 2;
+        $y = ($size - $textHeight) / 2;
+
+        imagestring($image, $fontSize, $x, $y, $initial, $textColor);
+    }
 
 } else {
+
+    // 🔥 fallback normal
+    $fontSize = 5;
+    $textWidth = imagefontwidth($fontSize) * strlen($initial);
+    $textHeight = imagefontheight($fontSize);
+
+    $x = ($size - $textWidth) / 2;
+    $y = ($size - $textHeight) / 2;
+
+    imagestring($image, $fontSize, $x, $y, $initial, $textColor);
+}
 
     // 🔥 fallback GRANDE (dibujado varias veces para simular tamaño)
     $fontSize = 5;
