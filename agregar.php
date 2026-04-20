@@ -26,54 +26,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
 
        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
 
-    $tmp = $_FILES['foto']['tmp_name'];
-    $filename = "user_" . time() . ".png";
+            $tmp = $_FILES['foto']['tmp_name'];
+            $filename = "user_" . time() . ".png";
 
-    // ruta REAL en servidor
-    $rutaFisica = __DIR__ . "/API/avatars/" . $filename;
+            $rutaFisica = __DIR__ . "/API/avatars/" . $filename;
+            $rutaBD = "API/avatars/" . $filename;
 
-    // ruta que se guarda en BD
-    $rutaBD = "API/avatars/" . $filename;
+            // 🔥 asegurar carpeta
+            if (!file_exists(__DIR__ . "/API/avatars/")) {
+                mkdir(__DIR__ . "/API/avatars/", 0777, true);
+            }
 
-    if (move_uploaded_file($tmp, $rutaFisica)) {
-        $avatar = $rutaBD;
-    } else {
-        $error = "❌ No se pudo subir la imagen";
-    }
+            if (move_uploaded_file($tmp, $rutaFisica)) {
+                $avatar = $rutaBD;
+            } else {
+                $error = "❌ No se pudo subir la imagen";
+            }
 
-} else {
+        } else {
 
-  include_once "API/avatar.php";
+            include_once "API/avatar.php";
 
-    $filename = "user_" . time() . ".png";
-    $ruta = "API/avatars/" . $filename;
+            $filename = "user_" . time() . ".png";
+            $ruta = "API/avatars/" . $filename;
+            $rutaFisica = __DIR__ . "/" . $ruta;
 
-    // ruta física real
-    $rutaFisica = __DIR__ . "/" . $ruta;
+            // 🔥 asegurar carpeta
+            if (!file_exists(__DIR__ . "/API/avatars/")) {
+                mkdir(__DIR__ . "/API/avatars/", 0777, true);
+            }
 
-    // crear avatar directamente
-    crearAvatar($nombre, true, $rutaFisica);
+            crearAvatar($nombre, true, $rutaFisica);
 
-    // guardar ruta en BD
-    $avatar = $ruta;
+            $avatar = $ruta;
+        }
 
-    $data = ['name' => $nombre];
-
-    $options = [
-        'http' => [
-            'header'  => "Content-type: application/x-www-form-urlencoded",
-            'method'  => 'POST',
-            'content' => http_build_query($data)
-        ]
-    ];
-
-    $context = stream_context_create($options);
-    $result = file_get_contents($avatar_api, false, $context);
-
-    $response = json_decode($result, true);
-
-    $avatar = $response['avatar']; // ej: avatars/user_x.png
-}
         // 🔥 GUARDAR EN BD
         $query = "INSERT INTO usuarios (nombre, correo, telefono, avatar) VALUES ($1, $2, $3, $4)";
         $resultado = pg_query_params($conexion, $query, array($nombre, $correo, $telefono, $avatar));
@@ -94,13 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Agregar Usuario</title>
 
-  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Iconos -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
-  <!-- Estilos personalizados -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -113,63 +95,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
         <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
       <?php endif; ?>
 
-    <div class="user-image mb-3">
-      <img id="avatarPreview" src="API/avatar.php?name=User" class="avatar-glow">
-    </div>
+      <div class="user-image mb-3">
+        <img id="avatarPreview" src="API/avatar.php?name=User" class="avatar-glow">
+      </div>
 
       <form action="" method="POST" enctype="multipart/form-data" class="text-start">
        <div class="mb-3">
-    <label class="form-label text-info">Foto de perfil (opcional)</label>
-    <input type="file" name="foto" class="form-control" accept="image/*">
-  </div>
-    <div class="mb-3">
-      <label class="form-label text-info">Nombre</label>
-    <input type="text" name="nombre" class="form-control" required>
-</div>
-        <div class="mb-3">
-          <label class="form-label text-info"><i class="bi bi-envelope-fill"></i> Correo</label>
-          <input type="email" name="correo" class="form-control" required>
-        </div>
+        <label class="form-label text-info">Foto de perfil (opcional)</label>
+        <input type="file" name="foto" class="form-control" accept="image/*">
+      </div>
 
-        <div class="mb-4">
-          <label class="form-label text-info"><i class="bi bi-telephone-fill"></i> Teléfono</label>
-          <input type="text" name="telefono" class="form-control" required>
-        </div>
+      <div class="mb-3">
+        <label class="form-label text-info">Nombre</label>
+        <input type="text" name="nombre" class="form-control" required>
+      </div>
 
-        <div class="d-flex justify-content-between">
-          <a href="usuarios.php" class="btn btn-secondary">
-            <i class="bi bi-arrow-left-circle"></i> Regresar
-          </a>
-          <button type="submit" name="guardar" class="btn btn-success">
-            <i class="bi bi-check-circle"></i> Guardar
-          </button>
-        </div>
+      <div class="mb-3">
+        <label class="form-label text-info"><i class="bi bi-envelope-fill"></i> Correo</label>
+        <input type="email" name="correo" class="form-control" required>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label text-info"><i class="bi bi-telephone-fill"></i> Teléfono</label>
+        <input type="text" name="telefono" class="form-control" required>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <a href="usuarios.php" class="btn btn-secondary">
+          <i class="bi bi-arrow-left-circle"></i> Regresar
+        </a>
+        <button type="submit" name="guardar" class="btn btn-success">
+          <i class="bi bi-check-circle"></i> Guardar
+        </button>
+      </div>
       </form>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 const fileInput = document.querySelector('input[name="foto"]');
 const nameInput = document.querySelector('input[name="nombre"]');
 const avatarImg = document.getElementById('avatarPreview');
 
-// 🔥 CUANDO SUBES IMAGEN
 fileInput.addEventListener('change', function () {
     const file = this.files[0];
 
     if (file) {
         const reader = new FileReader();
-
         reader.onload = function (e) {
-            avatarImg.src = e.target.result; // 👈 muestra imagen subida
+            avatarImg.src = e.target.result;
         }
-
         reader.readAsDataURL(file);
     }
 });
 
-// 🔥 CUANDO ESCRIBES NOMBRE (SOLO SI NO HAY IMAGEN)
 nameInput.addEventListener('input', function () {
     if (!fileInput.files.length) {
         let nombre = this.value.trim();
