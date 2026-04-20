@@ -53,7 +53,7 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
 }
 
     $textColor = imagecolorallocate($image, 255, 255, 255);
-    $font = __DIR__ . '/Roboto-Bold.ttf';
+    $font = realpath(__DIR__ . '/Roboto-Bold.ttf');
 
     if (file_exists($font)) {
 
