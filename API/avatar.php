@@ -57,19 +57,20 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
 
     if (file_exists($font)) {
 
-       $fontSize = $size * 0.5; // 🔥 un poco más grande
+    $fontSize = $size * 0.5; // 🔥 más grande pero seguro
 
     $bbox = imagettfbbox($fontSize, 0, $font, $initial);
 
     $textWidth = $bbox[2] - $bbox[0];
     $textHeight = $bbox[1] - $bbox[7];
 
-    // 🔥 centrado REAL (esto arregla que no se vean)
+    // 🔥 CENTRADO CORRECTO
     $x = ($size - $textWidth) / 2;
-    $y = ($size + $textHeight) / 2;
+    $y = ($size / 2) + ($textHeight / 4);
 
     imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
-    } else {
+
+} else {
         // fallback centrado
         $fontSize = 5;
         $textWidth = imagefontwidth($fontSize) * strlen($initial);
