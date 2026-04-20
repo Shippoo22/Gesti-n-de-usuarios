@@ -41,17 +41,16 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
 
     imagefilledellipse($image, $size/2, $size/2, $size, $size, $color);
 
-    // 🔤 iniciales
     $words = explode(" ", trim($name));
-    $words = array_filter($words);
+    $words = array_values(array_filter($words)); // 🔥 reindexa
 
     if (count($words) >= 2) {
-        $initial = strtoupper($words[0][0] . $words[1][0]);
-    } else {
+        $initial = strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1));
+    } elseif (count($words) === 1) {
         $initial = strtoupper(substr($words[0], 0, 2));
-    }
-
-    $initial = substr($initial, 0, 2);
+    } else {
+        $initial = "U"; // fallback
+}
 
     $textColor = imagecolorallocate($image, 255, 255, 255);
     $font = __DIR__ . '/Roboto-Bold.ttf';
