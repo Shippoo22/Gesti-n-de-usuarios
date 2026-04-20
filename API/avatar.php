@@ -41,61 +41,21 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
 
     imagefilledellipse($image, $size/2, $size/2, $size, $size, $color);
 
+    // 🔤 iniciales
     $words = explode(" ", trim($name));
-    $words = array_values(array_filter($words)); // 🔥 reindexa
+    $words = array_values(array_filter($words));
 
     if (count($words) >= 2) {
         $initial = strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1));
     } elseif (count($words) === 1) {
         $initial = strtoupper(substr($words[0], 0, 2));
     } else {
-        $initial = "U"; // fallback
-}
-
-   $textColor = imagecolorallocate($image, 255, 255, 255);
-
-    // 🔥 USAR SOLO FUENTE INTERNA (100% estable)
-    $fontSize = 5; // máximo en imagestring
-
-    $textWidth = imagefontwidth($fontSize) * strlen($initial);
-    $textHeight = imagefontheight($fontSize);
-
-    // 🔥 centrado perfecto
-    $x = ($size - $textWidth) / 2;
-    $y = ($size - $textHeight) / 2;
-    
-    // 🔥 dibujar varias veces para que se vea MÁS GRANDE
-    imagestring($image, $fontSize, $x-1, $y, $initial, $textColor);
-    imagestring($image, $fontSize, $x+1, $y, $initial, $textColor);
-    imagestring($image, $fontSize, $x, $y-1, $initial, $textColor);
-    imagestring($image, $fontSize, $x, $y+1, $initial, $textColor);
-    imagestring($image, $fontSize, $x, $y, $initial, $textColor); else {
-
-        // 🔥 fallback si falla la fuente
-        $fontSize = 5;
-        $textWidth = imagefontwidth($fontSize) * strlen($initial);
-        $textHeight = imagefontheight($fontSize);
-
-        $x = ($size - $textWidth) / 2;
-        $y = ($size - $textHeight) / 2;
-
-        imagestring($image, $fontSize, $x, $y, $initial, $textColor);
+        $initial = "U";
     }
 
-} else {
+    // 🎨 texto
+    $textColor = imagecolorallocate($image, 255, 255, 255);
 
-    // 🔥 fallback normal
-    $fontSize = 5;
-    $textWidth = imagefontwidth($fontSize) * strlen($initial);
-    $textHeight = imagefontheight($fontSize);
-
-    $x = ($size - $textWidth) / 2;
-    $y = ($size - $textHeight) / 2;
-
-    imagestring($image, $fontSize, $x, $y, $initial, $textColor);
-}
-
-    // 🔥 fallback GRANDE (dibujado varias veces para simular tamaño)
     $fontSize = 5;
 
     $textWidth = imagefontwidth($fontSize) * strlen($initial);
@@ -104,14 +64,14 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
     $x = ($size - $textWidth) / 2;
     $y = ($size - $textHeight) / 2;
 
-    // 🔥 hacer "zoom" dibujando varias veces
+    // 🔥 hacer letras más gruesas
     for ($i = -2; $i <= 2; $i++) {
         for ($j = -2; $j <= 2; $j++) {
             imagestring($image, $fontSize, $x + $i, $y + $j, $initial, $textColor);
         }
     }
-}
-    // 🔥 ESTO ESTABA MAL POSICIONADO (FUERA DE LA FUNCIÓN)
+
+    // salida
     if ($guardar && $ruta) {
         imagepng($image, $ruta);
     } else {
