@@ -58,15 +58,14 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
 
 if (file_exists($font)) {
 
-    $fontSize = 90; // 🔥 tamaño fijo (evita errores raros)
+  $fontSize = $size * 0.45;
 
     $bbox = imagettfbbox($fontSize, 0, $font, $initial);
 
     $textWidth = $bbox[2] - $bbox[0];
-    $textHeight = $bbox[1] - $bbox[7];
 
     $x = ($size - $textWidth) / 2;
-    $y = ($size / 2) + ($textHeight / 2);
+    $y = ($size - ($bbox[7])) / 2;
 
     imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
 
