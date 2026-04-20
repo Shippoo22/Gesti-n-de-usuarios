@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+ini_set('display_errors', 0);
+error_reporting(0);
 
 // Detectar método
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
@@ -23,7 +23,7 @@ if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
 
 function crearAvatar($name, $guardar = false, $ruta = null) {
 
-    $size =210;
+    $size = 210;
 
     if (ob_get_length()) ob_clean();
 
@@ -58,21 +58,20 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
 
     if (file_exists($font)) {
 
-    $fontSize = $size * 0.6; // 🔥 tamaño dinámico (más grande pero no se corta)
+        $fontSize = $size * 0.7; // 🔥 letras más grandes
 
-    $bbox = imagettfbbox($fontSize, 0, $font, $initial);
+        $bbox = imagettfbbox($fontSize, 0, $font, $initial);
 
-    $textWidth = $bbox[2] - $bbox[0];
-    $textHeight = $bbox[1] - $bbox[7];
+        $textWidth = $bbox[2] - $bbox[0];
+        $textHeight = $bbox[1] - $bbox[7];
 
-    // 🔥 centrado perfecto
-    $x = ($size - $textWidth) / 2;
-    $y = ($size + $textHeight) / 2;
+        $x = ($size - $textWidth) / 2;
+        $y = ($size / 2) + ($textHeight / 2); // 🔥 mejor centrado
 
-    imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
+        imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
 
     } else {
-       imagestring($image, 5, 80, 90, $initial, $textColor);
+        imagestring($image, 5, 80, 90, $initial, $textColor);
     }
 
     if ($guardar && $ruta) {
@@ -100,12 +99,11 @@ function guardarAvatar() {
 
     $filename = "user_" . time() . ".png";
 
-$carpeta = __DIR__ . "/avatars/";
+    $carpeta = __DIR__ . "/avatars/";
 
-// 🔥 crear carpeta si no existe
-if (!file_exists($carpeta)) {
-    mkdir($carpeta, 0777, true);
-}
+    if (!file_exists($carpeta)) {
+        mkdir($carpeta, 0777, true);
+    }
 
     $ruta = $carpeta . $filename;
 
@@ -117,7 +115,7 @@ if (!file_exists($carpeta)) {
     ]);
 }
 
-// 🔵 PUT (ACTUALIZAR)
+// 🔵 PUT
 function actualizarAvatar() {
 
     header("Content-Type: application/json");
@@ -142,7 +140,7 @@ function actualizarAvatar() {
     ]);
 }
 
-// 🔴 DELETE (ELIMINAR)
+// 🔴 DELETE
 function eliminarAvatar() {
 
     header("Content-Type: application/json");
