@@ -23,7 +23,7 @@ if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
 
 function crearAvatar($name, $guardar = false, $ruta = null) {
 
-    $size = 180;
+    $size = 260;
 
     if (ob_get_length()) ob_clean();
 
@@ -58,7 +58,7 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
 
     if (file_exists($font)) {
 
-    $fontSize = $size * 0.5; // 🔥 tamaño dinámico (más grande pero no se corta)
+    $fontSize = $size * 0.6; // 🔥 tamaño dinámico (más grande pero no se corta)
 
     $bbox = imagettfbbox($fontSize, 0, $font, $initial);
 
