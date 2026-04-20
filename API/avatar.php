@@ -58,17 +58,18 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
 
     if (file_exists($font)) {
 
-        $fontSize = 400; // 🔥 bajado porque 600 rompía todo
+    $fontSize = $size * 0.5; // 🔥 tamaño dinámico (más grande pero no se corta)
 
-        $bbox = imagettfbbox($fontSize, 0, $font, $initial);
+    $bbox = imagettfbbox($fontSize, 0, $font, $initial);
 
-        $textWidth = $bbox[2] - $bbox[0];
-        $textHeight = $bbox[1] - $bbox[7];
-    
-        $x = ($size - $textWidth) / 2;
-        $y = ($size + $textHeight) / 2;
+    $textWidth = $bbox[2] - $bbox[0];
+    $textHeight = $bbox[1] - $bbox[7];
 
-        imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
+    // 🔥 centrado perfecto
+    $x = ($size - $textWidth) / 2;
+    $y = ($size + $textHeight) / 2;
+
+    imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
 
     } else {
        imagestring($image, 5, 80, 90, $initial, $textColor);
