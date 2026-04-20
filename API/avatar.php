@@ -1,5 +1,6 @@
 <?php
-error_reporting(0);
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 // Detectar método
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
@@ -97,7 +98,15 @@ function guardarAvatar() {
     $name = $_POST['name'] ?? 'User';
 
     $filename = "user_" . time() . ".png";
-    $ruta = __DIR__ . "/avatars/" . $filename;
+
+$carpeta = __DIR__ . "/avatars/";
+
+// 🔥 crear carpeta si no existe
+if (!file_exists($carpeta)) {
+    mkdir($carpeta, 0777, true);
+}
+
+    $ruta = $carpeta . $filename;
 
     crearAvatar($name, true, $ruta);
 
