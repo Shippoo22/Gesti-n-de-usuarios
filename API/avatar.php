@@ -53,22 +53,35 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
         $initial = "U";
     }
 
-    // 🎨 texto
-    $textColor = imagecolorallocate($image, 255, 255, 255);
+$textColor = imagecolorallocate($image, 255, 255, 255);
+$font = __DIR__ . '/Roboto-Bold.ttf';
 
+if (file_exists($font)) {
+
+    $fontSize = $size * 0.5; // 🔥 tamaño grande proporcional
+
+    $bbox = imagettfbbox($fontSize, 0, $font, $initial);
+
+    $textWidth = $bbox[2] - $bbox[0];
+    $textHeight = $bbox[1] - $bbox[7];
+
+    // centrado perfecto
+    $x = ($size - $textWidth) / 2;
+    $y = ($size + $textHeight) / 2;
+
+    imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
+
+} else {
+    // fallback si falla la fuente
     $fontSize = 5;
-
     $textWidth = imagefontwidth($fontSize) * strlen($initial);
     $textHeight = imagefontheight($fontSize);
 
     $x = ($size - $textWidth) / 2;
     $y = ($size - $textHeight) / 2;
 
-    // 🔥 hacer letras más gruesas
-    for ($i = -2; $i <= 2; $i++) {
-        for ($j = -2; $j <= 2; $j++) {
-            imagestring($image, $fontSize, $x + $i, $y + $j, $initial, $textColor);
-        }
+    imagestring($image, $fontSize, $x, $y, $initial, $textColor);
+}
     }
 
     // salida
