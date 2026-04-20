@@ -52,17 +52,18 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
         $initial = "U";
     }
 
-    $textColor = imagecolorallocate($image, 255, 255, 255);
+   $textColor = imagecolorallocate($image, 255, 255, 255);
 
-    // 🔥 FUENTE TTF (LA BUENA)
-    $font = __DIR__ . '/Roboto-Bold.ttf';
+$font = __DIR__ . '/Roboto-Bold.ttf';
 
-    if (file_exists($font)) {
+// 🔥 Intentar usar TTF
+if (file_exists($font) && function_exists('imagettftext')) {
 
-        $fontSize = $size * 0.5;
+    $fontSize = $size * 0.45;
 
-        $bbox = imagettfbbox($fontSize, 0, $font, $initial);
+    $bbox = imagettfbbox($fontSize, 0, $font, $initial);
 
+    if ($bbox) {
         $textWidth = $bbox[2] - $bbox[0];
         $textHeight = $bbox[1] - $bbox[7];
 
@@ -70,19 +71,26 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
         $y = ($size + $textHeight) / 2;
 
         imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
-
-    } else {
-        // fallback (solo si falla la fuente)
-        $fontSize = 5;
-
-        $textWidth = imagefontwidth($fontSize) * strlen($initial);
-        $textHeight = imagefontheight($fontSize);
-
-        $x = ($size - $textWidth) / 2;
-        $y = ($size - $textHeight) / 2;
-
-        imagestring($image, $fontSize, $x, $y, $initial, $textColor);
     }
+
+} else {
+
+    // 🔥 FALLBACK MEJORADO (GRANDE Y VISIBLE)
+    $fontSize = 5;
+
+    $textWidth = imagefontwidth($fontSize) * strlen($initial);
+    $textHeight = imagefontheight($fontSize);
+
+    $x = ($size - $textWidth) / 2;
+    $y = ($size - $textHeight) / 2;
+
+    // 🔥 efecto "bold fake"
+    for ($i = -1; $i <= 1; $i++) {
+        for ($j = -1; $j <= 1; $j++) {
+            imagestring($image, $fontSize, $x + $i, $y + $j, $initial, $textColor);
+        }
+    }
+}
 
     // 🔥 salida (NO TOCAR)
     if ($guardar && $ruta) {
