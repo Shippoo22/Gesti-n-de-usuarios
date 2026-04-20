@@ -54,24 +54,33 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
     $initial = substr($initial, 0, 2);
 
     $textColor = imagecolorallocate($image, 255, 255, 255);
-    $font = __DIR__ . '/Roboto-Bold.ttf';
+      $font = __DIR__ . '/Roboto-Bold.ttf';
 
-    if (file_exists($font)) {
+if (file_exists($font)) {
 
-        $fontSize = $size * 0.7; // 🔥 letras más grandes
+    $fontSize = 90; // 🔥 tamaño fijo (evita errores raros)
 
-        $bbox = imagettfbbox($fontSize, 0, $font, $initial);
+    $bbox = imagettfbbox($fontSize, 0, $font, $initial);
 
-        $textWidth = $bbox[2] - $bbox[0];
-        $textHeight = $bbox[1] - $bbox[7];
+    $textWidth = $bbox[2] - $bbox[0];
+    $textHeight = $bbox[1] - $bbox[7];
 
-        $x = ($size - $textWidth) / 2;
-        $y = ($size / 2) + ($textHeight / 2); // 🔥 mejor centrado
+    $x = ($size - $textWidth) / 2;
+    $y = ($size / 2) + ($textHeight / 2);
 
-        imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
+    imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
 
     } else {
-        imagestring($image, 5, 80, 90, $initial, $textColor);
+    // 🔥 fallback centrado (ANTES estaba mal posicionado)
+    $fontSize = 5;
+    $textWidth = imagefontwidth($fontSize) * strlen($initial);
+    $textHeight = imagefontheight($fontSize);
+
+    $x = ($size - $textWidth) / 2;
+    $y = ($size - $textHeight) / 2;
+
+    imagestring($image, $fontSize, $x, $y, $initial, $textColor);
+}
     }
 
     if ($guardar && $ruta) {
