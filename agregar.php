@@ -43,8 +43,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
 
 } else {
 
-    // API AVATAR
-    $avatar_api = "http://localhost/CRUD/API/avatar.php";
+  include_once "API/avatar.php";
+
+    $filename = "user_" . time() . ".png";
+    $ruta = "API/avatars/" . $filename;
+
+    // ruta física real
+    $rutaFisica = __DIR__ . "/" . $ruta;
+
+    // crear avatar directamente
+    crearAvatar($nombre, true, $rutaFisica);
+
+    // guardar ruta en BD
+    $avatar = $ruta;
 
     $data = ['name' => $nombre];
 
