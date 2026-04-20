@@ -23,7 +23,7 @@ if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
 
 function crearAvatar($name, $guardar = false, $ruta = null) {
 
-    $size = 260;
+    $size = 190;
 
     if (ob_get_length()) ob_clean();
 
