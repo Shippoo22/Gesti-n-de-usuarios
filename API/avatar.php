@@ -55,33 +55,39 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
     $textColor = imagecolorallocate($image, 255, 255, 255);
     $font = realpath(__DIR__ . '/Roboto-Bold.ttf');
 
-    if (file_exists($font)) {
+if (file_exists($font)) {
 
-    $fontSize = $size * 0.5; // 🔥 más grande pero seguro
+    $fontSize = $size * 0.35;
 
     $bbox = imagettfbbox($fontSize, 0, $font, $initial);
 
     $textWidth = $bbox[2] - $bbox[0];
     $textHeight = $bbox[1] - $bbox[7];
 
-    // 🔥 CENTRADO CORRECTO
     $x = ($size - $textWidth) / 2;
-    $y = ($size / 2) + ($textHeight / 4);
+    $y = ($size + $textHeight) / 2;
 
+    // 🔥 dibujar texto con fuente
     imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
 
 } else {
-        // fallback centrado
-        $fontSize = 5;
-        $textWidth = imagefontwidth($fontSize) * strlen($initial);
-        $textHeight = imagefontheight($fontSize);
 
-        $x = ($size - $textWidth) / 2;
-        $y = ($size - $textHeight) / 2;
+    // 🔥 fallback GRANDE (dibujado varias veces para simular tamaño)
+    $fontSize = 5;
 
-        imagestring($image, $fontSize, $x, $y, $initial, $textColor);
+    $textWidth = imagefontwidth($fontSize) * strlen($initial);
+    $textHeight = imagefontheight($fontSize);
+
+    $x = ($size - $textWidth) / 2;
+    $y = ($size - $textHeight) / 2;
+
+    // 🔥 hacer "zoom" dibujando varias veces
+    for ($i = -2; $i <= 2; $i++) {
+        for ($j = -2; $j <= 2; $j++) {
+            imagestring($image, $fontSize, $x + $i, $y + $j, $initial, $textColor);
+        }
     }
-
+}
     // 🔥 ESTO ESTABA MAL POSICIONADO (FUERA DE LA FUNCIÓN)
     if ($guardar && $ruta) {
         imagepng($image, $ruta);
