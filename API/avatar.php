@@ -41,50 +41,50 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
 
     imagefilledellipse($image, $size/2, $size/2, $size, $size, $color);
 
-    // 🔤 iniciales
-    $words = explode(" ", trim($name));
-    $words = array_values(array_filter($words));
+    // 🔤 iniciales (CORRECTO)
+    $words = array_values(array_filter(explode(" ", trim($name))));
 
     if (count($words) >= 2) {
-        $initial = strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1));
+        $initial = strtoupper($words[0][0] . $words[1][0]);
     } elseif (count($words) === 1) {
         $initial = strtoupper(substr($words[0], 0, 2));
     } else {
         $initial = "U";
     }
 
-$textColor = imagecolorallocate($image, 255, 255, 255);
-$font = __DIR__ . '/Roboto-Bold.ttf';
+    $textColor = imagecolorallocate($image, 255, 255, 255);
 
-if (file_exists($font)) {
+    // 🔥 FUENTE TTF (LA BUENA)
+    $font = __DIR__ . '/Roboto-Bold.ttf';
 
-    $fontSize = $size * 0.5; // 🔥 tamaño grande proporcional
+    if (file_exists($font)) {
 
-    $bbox = imagettfbbox($fontSize, 0, $font, $initial);
+        $fontSize = $size * 0.5;
 
-    $textWidth = $bbox[2] - $bbox[0];
-    $textHeight = $bbox[1] - $bbox[7];
+        $bbox = imagettfbbox($fontSize, 0, $font, $initial);
 
-    // centrado perfecto
-    $x = ($size - $textWidth) / 2;
-    $y = ($size + $textHeight) / 2;
+        $textWidth = $bbox[2] - $bbox[0];
+        $textHeight = $bbox[1] - $bbox[7];
 
-    imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
+        $x = ($size - $textWidth) / 2;
+        $y = ($size + $textHeight) / 2;
 
-} else {
-    // fallback si falla la fuente
-    $fontSize = 5;
-    $textWidth = imagefontwidth($fontSize) * strlen($initial);
-    $textHeight = imagefontheight($fontSize);
+        imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
 
-    $x = ($size - $textWidth) / 2;
-    $y = ($size - $textHeight) / 2;
+    } else {
+        // fallback (solo si falla la fuente)
+        $fontSize = 5;
 
-    imagestring($image, $fontSize, $x, $y, $initial, $textColor);
-}
+        $textWidth = imagefontwidth($fontSize) * strlen($initial);
+        $textHeight = imagefontheight($fontSize);
+
+        $x = ($size - $textWidth) / 2;
+        $y = ($size - $textHeight) / 2;
+
+        imagestring($image, $fontSize, $x, $y, $initial, $textColor);
     }
 
-    // salida
+    // 🔥 salida (NO TOCAR)
     if ($guardar && $ruta) {
         imagepng($image, $ruta);
     } else {
