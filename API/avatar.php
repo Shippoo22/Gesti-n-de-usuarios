@@ -84,18 +84,32 @@ if (file_exists($font) && function_exists('imagettftext')) {
 // 🔥 SI FALLA TTF → fallback FORZADO
 if (!$textoDibujado) {
 
-    $fontSize = 5;
+$fontSize = 5;
 
-    $textWidth = imagefontwidth($fontSize) * strlen($initial);
-    $textHeight = imagefontheight($fontSize);
+$textWidth = imagefontwidth($fontSize) * strlen($initial);
+$textHeight = imagefontheight($fontSize);
 
-    $x = ($size - $textWidth) / 2;
-    $y = ($size - $textHeight) / 2;
+// 🔥 ESCALAR (hacerlo más grande sin ensuciar)
+$scale = 3; // puedes probar 2 o 4
 
-    // 🔥 hacemos la letra GRANDE tipo “bold”
-    for ($i = -2; $i <= 2; $i++) {
-        for ($j = -2; $j <= 2; $j++) {
-            imagestring($image, $fontSize, $x + $i, $y + $j, $initial, $textColor);
+$x = ($size - ($textWidth * $scale)) / 2;
+$y = ($size - ($textHeight * $scale)) / 2;
+
+// 🔥 dibujar "zoom" limpio
+for ($i = 0; $i < strlen($initial); $i++) {
+
+    $char = $initial[$i];
+
+    for ($sx = 0; $sx < $scale; $sx++) {
+        for ($sy = 0; $sy < $scale; $sy++) {
+            imagestring(
+                $image,
+                $fontSize,
+                $x + ($i * imagefontwidth($fontSize) * $scale) + $sx,
+                $y + $sy,
+                $char,
+                $textColor
+            );
         }
     }
 }
