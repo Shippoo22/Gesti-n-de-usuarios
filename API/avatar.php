@@ -58,71 +58,47 @@ $font = __DIR__ . '/Roboto-Bold.ttf';
 
 $textoDibujado = false;
 
-// 🔥 INTENTO CON TTF
-if (file_exists($font) && function_exists('imagettftext')) {
-
-    $fontSize = $size * 0.45;
-
-    $bbox = @imagettfbbox($fontSize, 0, $font, $initial);
-
-    if ($bbox) {
-
-        $textWidth = $bbox[2] - $bbox[0];
-        $textHeight = $bbox[1] - $bbox[7];
-
-        $x = ($size - $textWidth) / 2;
-        $y = ($size + $textHeight) / 2;
-
-        $result = @imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
-
-        if ($result) {
-            $textoDibujado = true;
-        }
-    }
-}
-
 // 🔥 SI FALLA TTF → fallback FORZADO
 if (!$textoDibujado) {
 
-$fontSize = 5;
+    $fontSize = 5;
 
-$textWidth = imagefontwidth($fontSize) * strlen($initial);
-$textHeight = imagefontheight($fontSize);
+    $textWidth = imagefontwidth($fontSize) * strlen($initial);
+    $textHeight = imagefontheight($fontSize);
 
-// 🔥 ESCALAR (hacerlo más grande sin ensuciar)
-$scale = 3; // puedes probar 2 o 4
+    $scale = 3;
 
-$x = ($size - ($textWidth * $scale)) / 2;
-$y = ($size - ($textHeight * $scale)) / 2;
+    $x = ($size - ($textWidth * $scale)) / 2;
+    $y = ($size - ($textHeight * $scale)) / 2;
 
-// 🔥 dibujar "zoom" limpio
-for ($i = 0; $i < strlen($initial); $i++) {
+    for ($i = 0; $i < strlen($initial); $i++) {
 
-    $char = $initial[$i];
+        $char = $initial[$i];
 
-    for ($sx = 0; $sx < $scale; $sx++) {
-        for ($sy = 0; $sy < $scale; $sy++) {
-            imagestring(
-                $image,
-                $fontSize,
-                $x + ($i * imagefontwidth($fontSize) * $scale) + $sx,
-                $y + $sy,
-                $char,
-                $textColor
-            );
+        for ($sx = 0; $sx < $scale; $sx++) {
+            for ($sy = 0; $sy < $scale; $sy++) {
+                imagestring(
+                    $image,
+                    $fontSize,
+                    $x + ($i * imagefontwidth($fontSize) * $scale) + $sx,
+                    $y + $sy,
+                    $char,
+                    $textColor
+                );
+            }
         }
     }
 }
 
-    // 🔥 salida (NO TOCAR)
-    if ($guardar && $ruta) {
-        imagepng($image, $ruta);
-    } else {
-        header("Content-Type: image/png");
-        imagepng($image);
-    }
+// 🔥 SALIDA (SIEMPRE FUERA DEL IF)
+if ($guardar && $ruta) {
+    imagepng($image, $ruta);
+} else {
+    header("Content-Type: image/png");
+    imagepng($image);
+}
 
-    imagedestroy($image);
+imagedestroy($image);
 }
 
 // 🟢 GET
