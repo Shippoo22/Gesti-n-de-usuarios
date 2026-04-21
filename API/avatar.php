@@ -52,30 +52,38 @@ function crearAvatar($name, $guardar = false, $ruta = null) {
         $initial = "U";
     }
 
-   $textColor = imagecolorallocate($image, 255, 255, 255);
+$textColor = imagecolorallocate($image, 255, 255, 255);
 
 $font = __DIR__ . '/Roboto-Bold.ttf';
 
-// 🔥 Intentar usar TTF
+$textoDibujado = false;
+
+// 🔥 INTENTO CON TTF
 if (file_exists($font) && function_exists('imagettftext')) {
 
     $fontSize = $size * 0.45;
 
-    $bbox = imagettfbbox($fontSize, 0, $font, $initial);
+    $bbox = @imagettfbbox($fontSize, 0, $font, $initial);
 
     if ($bbox) {
+
         $textWidth = $bbox[2] - $bbox[0];
         $textHeight = $bbox[1] - $bbox[7];
 
         $x = ($size - $textWidth) / 2;
         $y = ($size + $textHeight) / 2;
 
-        imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
+        $result = @imagettftext($image, $fontSize, 0, $x, $y, $textColor, $font, $initial);
+
+        if ($result) {
+            $textoDibujado = true;
+        }
     }
+}
 
-} else {
+// 🔥 SI FALLA TTF → fallback FORZADO
+if (!$textoDibujado) {
 
-    // 🔥 FALLBACK MEJORADO (GRANDE Y VISIBLE)
     $fontSize = 5;
 
     $textWidth = imagefontwidth($fontSize) * strlen($initial);
@@ -84,9 +92,9 @@ if (file_exists($font) && function_exists('imagettftext')) {
     $x = ($size - $textWidth) / 2;
     $y = ($size - $textHeight) / 2;
 
-    // 🔥 efecto "bold fake"
-    for ($i = -1; $i <= 1; $i++) {
-        for ($j = -1; $j <= 1; $j++) {
+    // 🔥 hacemos la letra GRANDE tipo “bold”
+    for ($i = -2; $i <= 2; $i++) {
+        for ($j = -2; $j <= 2; $j++) {
             imagestring($image, $fontSize, $x + $i, $y + $j, $initial, $textColor);
         }
     }
